@@ -24,7 +24,7 @@ Proposta de paths (não sobrescrever releases):
 /artifacts/snapshot/<release_id>/snapshot.json.meta.json.sig
 ```
 - `release_id` = `YYYYMMDDTHHMMSSZ_<gitsha7>`.
-- `snapshot.json.meta.json` **faz parte do MVP** por baixo custo e maior auditabilidade. Ele registra timestamp de geração, origem do artefato e `release_id`, e é publicado como artefato imutável junto ao snapshot. O hash e a assinatura cobrem `snapshot.json` e `snapshot.json.meta.json`.
+- `snapshot.json.meta.json` **faz parte do MVP** por baixo custo e maior auditabilidade. Ele registra timestamp de geração, origem do artefato e `release_id`, e é publicado como artefato imutável junto ao snapshot. Os hashes e assinaturas cobrem os arquivos `.sha256` correspondentes a `snapshot.json` e `snapshot.json.meta.json`.
 
 ### B) Separação de responsabilidades
 - **governanca-system:** gera o snapshot.
