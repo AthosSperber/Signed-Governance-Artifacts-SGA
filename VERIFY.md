@@ -4,12 +4,12 @@
 Permitir que um consumidor valide integridade e autenticidade de um snapshot publicado pelo SGA.
 
 ## Pré-requisitos
-- CLI de verificação (ainda **não implementada** — placeholder).
 - Chave pública de verificação (placeholder: `PUBLIC_KEY_PLACEHOLDER`).
 - URL base de distribuição (placeholder: `https://<CLOUDFRONT_DOMAIN>/artifacts/snapshot/`).
 
 ## Contratos mínimos (documento)
-- **O que é assinado:** o hash SHA-256 de `snapshot.json` e `snapshot.json.meta.json` (hashes calculados separadamente, cada um com sua assinatura).
+- **O que é assinado:** os arquivos `snapshot.json.sha256` e `snapshot.json.meta.json.sha256` (cada hash é assinado separadamente).
+- **Formato do `.sha256`:** exatamente o formato do `sha256sum`: `<hex><dois espaços><nome do arquivo>\n`.
 - **Algoritmo de assinatura:** Ed25519.
 - **Formato do `.sig`:** base64 em arquivo texto contendo apenas a assinatura (uma linha).
 
@@ -19,7 +19,7 @@ Esses contratos serão implementados no MVP e não mudam a estrutura append-only
 1. Definir o `release_id`.
 2. Baixar `snapshot.json`, `snapshot.json.sha256`, `snapshot.json.sig`, `snapshot.json.meta.json`, `snapshot.json.meta.json.sha256` e `snapshot.json.meta.json.sig`.
 3. Verificar os hashes SHA-256.
-4. Verificar as assinaturas com a chave pública (Ed25519).
+4. Verificar as assinaturas (Ed25519) **sobre os arquivos `.sha256`** com a chave pública.
 
 ### Exemplo (placeholder)
 ```bash
@@ -38,11 +38,18 @@ curl -O "$BASE_URL/$RELEASE_ID/snapshot.json.meta.json.sig"
 sha256sum -c snapshot.json.sha256
 sha256sum -c snapshot.json.meta.json.sha256
 
-# Verificar assinatura (exemplo genérico)
-sgaverify --pubkey PUBLIC_KEY_PLACEHOLDER --sig snapshot.json.sig --file snapshot.json --alg ed25519 --sig-format base64
-sgaverify --pubkey PUBLIC_KEY_PLACEHOLDER --sig snapshot.json.meta.json.sig --file snapshot.json.meta.json --alg ed25519 --sig-format base64
+# Verificar assinatura (exemplo preferencial com ssh-keygen -Y)
+# Requer chave pública em formato SSH (ex.: "ssh-ed25519 AAAA...").
+base64 -d snapshot.json.sig > snapshot.json.sig.bin
+base64 -d snapshot.json.meta.json.sig > snapshot.json.meta.json.sig.bin
+
+ssh-keygen -Y verify -f PUBLIC_KEY_PLACEHOLDER -I "SGA" \
+  -n "snapshot" -s snapshot.json.sig.bin < snapshot.json.sha256
+ssh-keygen -Y verify -f PUBLIC_KEY_PLACEHOLDER -I "SGA" \
+  -n "snapshot" -s snapshot.json.meta.json.sig.bin < snapshot.json.meta.json.sha256
 ```
 
 ## Observações
-- A CLI `sgaverify` é **planejada** para o MVP e substituirá o comando genérico acima.
+- A CLI `sgaverify` é **opcional** e **fora do MVP**; se existir no futuro, apenas encapsulará um verificador Ed25519 equivalente.
+- O exemplo com `ssh-keygen -Y verify` é preferencial, mas qualquer verificador Ed25519 que valide a assinatura sobre o arquivo `.sha256` é aceitável.
 - Até o MVP, os valores de URL e chave pública permanecerão como placeholders.
