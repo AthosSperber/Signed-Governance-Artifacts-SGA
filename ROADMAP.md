@@ -5,27 +5,26 @@
 - Documentação base e contratos conceituais mínimos.
 - Definição de paths append-only e responsabilidades.
 
-## Sprint 1 — Especificação do pipeline MVP
-- Descrever fluxo de publicação (S3 + CloudFront + GitHub Actions) em nível conceitual.
-- Definir formato exato do snapshot e metadata mínima.
-- Especificar artefatos de assinatura e hashing.
+## Sprint 1 — Infra básica
+- S3 com versionamento habilitado.
+- CloudFront com OAC.
+- IaC versionado para provisionamento inicial.
 
-## Sprint 2 — Infraestrutura mínima (planejada)
-- IaC para S3, CloudFront e versionamento (quando aprovado).
-- Políticas de acesso e distribuição.
-- Documentação de operação e bootstrap.
+## Sprint 2 — Pipeline automatizado
+- Geração de hash SHA-256 do snapshot.
+- Upload do snapshot e `.sha256`.
+- Registro mínimo do release.
 
-## Sprint 3 — Pipeline de publicação (planejado)
-- GitHub Actions para assinatura e upload.
-- Geração de manifestos de release.
-- Observabilidade mínima (logs e checks simples).
+## Sprint 3 — Assinatura
+- Geração de `.sig`.
+- Documentação de verificação via CLI.
+- Publicação dos contratos de assinatura.
 
-## Sprint 4 — CLI de verificação (planejada)
-- Ferramenta CLI para baixar e validar snapshot.
-- Verificação de hash e assinatura.
-- Documentação de uso e exemplos.
+## Sprint 4 — Integração com consumidores
+- Integração com ConexaoSolar via CloudFront.
+- Fluxo de consumo e validação fim a fim.
 
-## Sprint 5 — Hardening e auditoria (planejada)
-- Revisão de segurança do fluxo.
-- Checklist de auditoria e reprodutibilidade.
-- Ajustes de documentação com base em uso real.
+## Sprint 5 — Hardening
+- KMS/rotação de chaves.
+- Cache controlado.
+- Observabilidade mínima.

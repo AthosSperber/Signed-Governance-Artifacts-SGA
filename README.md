@@ -3,6 +3,8 @@
 ## O que é
 SGA é um projeto para publicar artefatos governados com integridade criptográfica verificável usando AWS (S3 + CloudFront) e automação via GitHub Actions. Ele define contratos mínimos de paths, versionamento e verificação para que consumidores possam validar a autenticidade e a imutabilidade dos artefatos publicados.
 
+**Status atual:** Sprint 0 (documentação). Infra/pipeline ainda não implementados.
+
 ## O que não é
 - Não é um backend, API REST, dashboard ou sistema de autenticação.
 - Não é um conjunto de microserviços, Kubernetes, blockchain ou ML/IA.

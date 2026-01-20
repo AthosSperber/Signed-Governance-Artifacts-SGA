@@ -22,7 +22,7 @@ Proposta de paths (não sobrescrever releases):
 /artifacts/snapshot/<release_id>/snapshot.json.meta.json
 ```
 - `release_id` = `YYYYMMDDTHHMMSSZ_<gitsha7>`.
-- `snapshot.json.meta.json` é **planejado** para metadata adicional; não obrigatório no MVP, pois o hash e a assinatura já cobrem integridade e autenticidade. Quando existir, deverá ser imutável e assinado juntamente com o snapshot.
+- `snapshot.json.meta.json` **faz parte do MVP** por baixo custo e maior auditabilidade. Ele registra timestamp de geração, origem do artefato e `release_id`, e é publicado como artefato imutável junto ao snapshot. O hash e a assinatura cobrem `snapshot.json` e `snapshot.json.meta.json`.
 
 ### B) Separação de responsabilidades
 - **governanca-system:** gera o snapshot.
